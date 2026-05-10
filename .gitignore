@@ -1,0 +1,7 @@
+.DS_Store
+.vscode/
+
+# Local dependency and build output from the Vite app
+client/node_modules/
+client/dist/
+client/dist-ssr/
