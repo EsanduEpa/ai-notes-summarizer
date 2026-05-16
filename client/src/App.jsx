@@ -8,25 +8,25 @@ function App() {
   // Tracks whether the app is currently summarizing.
   const [loading, setLoading] = useState(false);
 
-  const handleSummarize = () => {
-    // Stop if the user did not type anything useful.
+  const handleSummarize = async () => {
     if (notes.trim() === '') {
-      alert('Please enter some notes to summarize.');
+      setSummary('Please enter some notes to summarize.');
       return;
     }
-
-    // Show loading state while the summary is being prepared.
     setLoading(true);
 
-    setTimeout(() => {
-      // Take the first 100 characters as a simple fake summary.
-      const shortSummary = notes.slice(0, 100);
-      // Save the summary so it can be displayed below.
-      setSummary(shortSummary + '...');
-      // Turn off loading after the summary is ready.
-      setLoading(false);
-    }, 1500);
-  };
+    const response = await fetch('http://localhost:5001/summarize', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ notes : notes }),
+    });
+
+    const data = await response.json();
+    setSummary(data.summary);
+    setLoading(false);
+  }
 
   return (
     <div>
