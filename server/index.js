@@ -21,16 +21,34 @@ app.get("/", (req, res) => {
   res.send("Backend is running");
 });
 
-// get from summarize endpoint and return a short summary of the notes
-app.post("/summarize", (req, res) => {
-    const notes = req.body.notes;
-    console.log("Received notes:", notes);
-    const shortSummary = notes.slice(0, 100);
 
-    res.json({
-        summary: shortSummary + "..."
-    });
-    })
+app.post("/summarize", async (req, res) => {
+    try{
+        const notes = req.body.notes;
+
+        if (!notes || notes.trim() === "") {
+            return res.status(400).json({ 
+                summary: "Please provide some notes to summarize." 
+            });
+        }
+
+        const response = await ai.models.generateContent({
+            model: "gemini-2.5-flash",
+            contents: `Summarize the following notes in a concise manner:\n\n${notes}`,
+        });
+
+        res.json({
+            summary: response.text,
+        });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            summary: "Failed to generate summary."
+        });
+    }
+
+});
 
 
 
@@ -48,7 +66,7 @@ app.get("/test-ai", async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({
-      error: "AI test failed",
+      error: "AI test failedd",
     });
   }
 });
