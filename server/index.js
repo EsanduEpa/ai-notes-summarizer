@@ -66,7 +66,7 @@ app.get("/test-ai", async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({
-      error: "AI test failedd",
+      error: "AI test failed",
     });
   }
 });
