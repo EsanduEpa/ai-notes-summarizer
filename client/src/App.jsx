@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import './App.css';
 
 function App() {
   // Stores the full notes typed by the user.
@@ -29,32 +30,55 @@ function App() {
   }
 
   return (
-    <div>
-      <h1>AI Notes Summarizer</h1>
-      <label>Enter your notes</label>
+    <div className="app-shell">
+      <div className="app-card">
+        <div className="app-header">
+          <p className="app-eyebrow">Simple AI productivity tool</p>
+          <h1>AI Notes Summarizer</h1>
+          <p className="app-description">
+            Paste your notes below and generate a short, clear summary in one
+            click.
+          </p>
+        </div>
 
-      <br />
+        <div className="form-group">
+          <label htmlFor="notes" className="notes-label">Enter your notes</label>
 
-      <textarea
-        // Shows helper text before the user types.
-        placeholder="Paste your notes here..."
-        // Connects the textarea to the notes state.
-        value={notes}
-        // Updates notes state whenever the user types.
-        onChange={(e) => setNotes(e.target.value)}
-      />
-      <br />
+          <textarea
+            id="notes"
+            className="notes-textarea"
+            // Shows helper text before the user types.
+            placeholder="Paste your notes here..."
+            // Connects the textarea to the notes state.
+            value={notes}
+            // Updates notes state whenever the user types.
+            onChange={(e) => setNotes(e.target.value)}
+          />
+        </div>
 
-      
-      <button onClick={handleSummarize} disabled={loading}>
-        {/* Shows different text while loading. */}
-        {loading ? 'Summarizing...' : 'Summarize'}
-      </button>
+        <button
+          className="summarize-button"
+          onClick={handleSummarize}
+          disabled={loading}
+        >
+          {/* Shows different text while loading. */}
+          {loading ? 'Summarizing...' : 'Summarize'}
+        </button>
 
-      {/* Displays the full notes entered by the user. */}
-      <p>You typed: {notes}</p>
-      {/* Displays the generated summary. */}
-      <p>Summary: {summary}</p>
+        <div className="info-grid">
+          <div className="result-box">
+            <h2>Your Notes</h2>
+            {/* Displays the full notes entered by the user. */}
+            <p>{notes || 'Your typed notes will appear here.'}</p>
+          </div>
+
+          <div className="result-box summary-box">
+            <h2>Summary</h2>
+            {/* Displays the generated summary. */}
+            <p>{summary || 'Your AI-generated summary will appear here.'}</p>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
