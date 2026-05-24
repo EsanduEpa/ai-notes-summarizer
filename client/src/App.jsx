@@ -62,7 +62,14 @@ function App() {
           disabled={loading}
         >
           {/* Shows different text while loading. */}
-          {loading ? 'Summarizing...' : 'Summarize'}
+          { loading ? ( 
+            <> 
+            <span className='spinner'></span>
+               Summarizing...
+          </>
+          ) : (
+            "Summarize"
+          )}
         </button>
 
         <div className="info-grid">
