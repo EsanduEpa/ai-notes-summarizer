@@ -168,6 +168,15 @@ button{
   animation: spin 0.8s linear infinite;
 }
 
+.error-message {
+  margin-top: 16px;
+  padding: 12px;
+  background: #fee2e2;
+  color: #991b1b;
+  border-radius: 10px;
+  font-size: 14px;
+}
+
 @keyframes spin {
   to { transform: rotate(360deg); }
   

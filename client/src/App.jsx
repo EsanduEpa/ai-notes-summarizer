@@ -8,6 +8,8 @@ function App() {
   const [summary, setSummary] = useState('');
   // Tracks whether the app is currently summarizing.
   const [loading, setLoading] = useState(false);
+  // Stores any error messages from the summarization process.  
+  const [error, setError] = useState("");
 
   const handleSummarize = async () => {
     if (notes.trim() === '') {
@@ -15,18 +17,24 @@ function App() {
       return;
     }
     setLoading(true);
+    setError("");
 
-    const response = await fetch('http://localhost:5001/summarize', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ notes : notes }),
-    });
+    try {
+      const response = await fetch('http://localhost:5001/summarize', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ notes : notes }),
+      });
 
-    const data = await response.json();
-    setSummary(data.summary);
-    setLoading(false);
+      const data = await response.json();
+      setSummary(data.summary);
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -81,8 +89,12 @@ function App() {
 
           <div className="result-box summary-box">
             <h2>Summary</h2>
-            {/* Displays the generated summary. */}
-            <p>{summary || 'Your AI-generated summary will appear here.'}</p>
+            { error ? (
+              <p className="error-message">{error}</p>
+            ) : (
+              // Displays the summary returned from the backend.
+              <p>{summary || 'Your summary will appear here.'}</p>
+            )}
           </div>
         </div>
       </div>
