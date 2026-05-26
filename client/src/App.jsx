@@ -11,6 +11,11 @@ function App() {
   // Stores any error messages from the summarization process.  
   const [error, setError] = useState("");
 
+  const handleCopy = async () => {
+  await navigator.clipboard.writeText(summary);
+  alert("Summary copied!");
+};
+
   const handleSummarize = async () => {
     if (notes.trim() === '') {
       setSummary('Please enter some notes to summarize.');
@@ -94,6 +99,12 @@ function App() {
             ) : (
               // Displays the summary returned from the backend.
               <p>{summary || 'Your summary will appear here.'}</p>
+            )}
+
+            {summary && !error && (
+              <button className="copy-button" onClick={handleCopy}>
+                Copy Summary
+              </button>
             )}
           </div>
         </div>

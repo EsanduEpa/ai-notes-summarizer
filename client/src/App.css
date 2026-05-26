@@ -177,6 +177,15 @@ button{
   font-size: 14px;
 }
 
+.copy-button {
+  margin-top: 12px;
+  background: #10b981;
+}
+
+.copy-button:hover {
+  background: #059669;
+}
+
 @keyframes spin {
   to { transform: rotate(360deg); }
   
