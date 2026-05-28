@@ -1,5 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './App.css';
+
+
 
 function App() {
   // Stores the full notes typed by the user.
@@ -10,6 +12,21 @@ function App() {
   const [loading, setLoading] = useState(false);
   // Stores any error messages from the summarization process.  
   const [error, setError] = useState("");
+  // Stores the history of summaries generated during the session.
+  const [history, setHistory] = useState([]);
+
+
+  useEffect(() => {
+  const savedHistory = localStorage.getItem("summaryHistory");
+
+  if (savedHistory) {
+    setHistory(JSON.parse(savedHistory));
+  }
+}, []);
+
+useEffect(() => {
+  localStorage.setItem("summaryHistory", JSON.stringify(history));
+}, [history]);
 
   const handleCopy = async () => {
   await navigator.clipboard.writeText(summary);
@@ -35,6 +52,12 @@ function App() {
 
       const data = await response.json();
       setSummary(data.summary);
+
+      setHistory(prevHistory => [
+        ...prevHistory,
+        { id: Date.now(), notes, summary: data.summary }
+      ]);
+      
     } catch (error) {
       setError(error.message);
     } finally {
@@ -107,9 +130,26 @@ function App() {
               </button>
             )}
           </div>
+
+            <div className="history-box">
+              <h2>History</h2>
+              {history.length === 0 ? (
+                <p>No summary history available.</p>
+              ) : (
+                <ul>
+                  {history.map((item) => (
+                    <li key={item.id}>
+                      
+                      <p><strong>Summary:</strong> {item.summary}</p>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          </div>
         </div>
       </div>
-    </div>
+    
   );
 }
 

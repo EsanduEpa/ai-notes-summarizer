@@ -196,6 +196,26 @@ button{
   background: #059669;
 }
 
+.history-box {
+  margin-top: 24px;
+  padding: 20px;
+  background: #f9fafb;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+}
+
+.history-item {
+  margin-top: 12px;
+  padding: 14px;
+  background: white;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+}
+
+.history-item h3 {
+  margin-top: 0;
+}
+
 @keyframes spin {
   to { transform: rotate(360deg); }
   
