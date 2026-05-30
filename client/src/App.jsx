@@ -138,8 +138,8 @@ useEffect(() => {
               ) : (
                 <ul>
                   {history.map((item) => (
-                    <li key={item.id}>
-                      
+                    <li key={item.id} className="history-item">
+                      <p><strong>Notes:</strong> {item.notes}</p>
                       <p><strong>Summary:</strong> {item.summary}</p>
                     </li>
                   ))}
