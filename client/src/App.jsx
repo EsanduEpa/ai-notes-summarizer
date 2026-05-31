@@ -65,6 +65,11 @@ useEffect(() => {
     }
   }
 
+  const handleClearHistory = () => {
+  setHistory([]);
+  localStorage.removeItem("summaryHistory");
+};
+
   return (
     <div className="app-shell">
       <div className="app-card">
@@ -143,6 +148,13 @@ useEffect(() => {
                       <p><strong>Summary:</strong> {item.summary}</p>
                     </li>
                   ))}
+
+                  {history.length > 0 && (
+                      <button className="clear-history-button" onClick={handleClearHistory}>
+                          Clear History
+                      </button>
+                  )}
+
                 </ul>
               )}
             </div>

@@ -216,6 +216,15 @@ button{
   margin-top: 0;
 }
 
+.clear-history-button {
+  margin-bottom: 12px;
+  background: #ef4444;
+}
+
+.clear-history-button:hover {
+  background: #dc2626;
+}
+
 @keyframes spin {
   to { transform: rotate(360deg); }
   
