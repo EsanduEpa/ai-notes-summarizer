@@ -13,20 +13,32 @@ function App() {
   // Stores any error messages from the summarization process.  
   const [error, setError] = useState("");
   // Stores the history of summaries generated during the session.
-  const [history, setHistory] = useState([]);
+  const [history, setHistory] = useState(() => {
+    const savedHistory = localStorage.getItem("summaryHistory");
 
-
-  useEffect(() => {
-  const savedHistory = localStorage.getItem("summaryHistory");
-
-  if (savedHistory) {
-    setHistory(JSON.parse(savedHistory));
-  }
-}, []);
+    return savedHistory ? JSON.parse(savedHistory) : [];
+  });
+  // Stores the text typed into the history search field.
+  const [historySearch, setHistorySearch] = useState("");
+  // Stores the active search term after the user clicks search.
+  const [activeHistorySearch, setActiveHistorySearch] = useState("");
 
 useEffect(() => {
   localStorage.setItem("summaryHistory", JSON.stringify(history));
 }, [history]);
+
+const filteredHistory = history.filter((item) => {
+  const searchTerm = activeHistorySearch.trim().toLowerCase();
+
+  if (searchTerm === "") {
+    return true;
+  }
+
+  return (
+    item.notes.toLowerCase().includes(searchTerm) ||
+    item.summary.toLowerCase().includes(searchTerm)
+  );
+});
 
   const handleCopy = async () => {
   await navigator.clipboard.writeText(summary);
@@ -67,7 +79,13 @@ useEffect(() => {
 
   const handleClearHistory = () => {
   setHistory([]);
+  setHistorySearch("");
+  setActiveHistorySearch("");
   localStorage.removeItem("summaryHistory");
+};
+
+const handleSearchHistory = () => {
+  setActiveHistorySearch(historySearch);
 };
 
   return (
@@ -141,13 +159,33 @@ useEffect(() => {
               {history.length === 0 ? (
                 <p>No summary history available.</p>
               ) : (
-                <ul>
-                  {history.map((item) => (
-                    <li key={item.id} className="history-item">
-                      <p><strong>Notes:</strong> {item.notes}</p>
-                      <p><strong>Summary:</strong> {item.summary}</p>
-                    </li>
-                  ))}
+                <>
+                  <div className="history-search">
+                    <input
+                      type="search"
+                      className="history-search-input"
+                      placeholder="Search history..."
+                      value={historySearch}
+                      onChange={(e) => setHistorySearch(e.target.value)}
+                    />
+
+                    <button className="history-search-button" onClick={handleSearchHistory}>
+                      Search History
+                    </button>
+                  </div>
+
+                  {filteredHistory.length === 0 ? (
+                    <p>No matching history found.</p>
+                  ) : (
+                    <ul>
+                      {filteredHistory.map((item) => (
+                        <li key={item.id} className="history-item">
+                          <p><strong>Notes:</strong> {item.notes}</p>
+                          <p><strong>Summary:</strong> {item.summary}</p>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
 
                   {history.length > 0 && (
                       <button className="clear-history-button" onClick={handleClearHistory}>
@@ -155,7 +193,7 @@ useEffect(() => {
                       </button>
                   )}
 
-                </ul>
+                </>
               )}
             </div>
           </div>
