@@ -88,6 +88,10 @@ const handleSearchHistory = () => {
   setActiveHistorySearch(historySearch);
 };
 
+const handleDeleteHistoryItem = (id) => {
+  setHistory(prevHistory => prevHistory.filter((item) => item.id !== id));
+};
+
   return (
     <div className="app-shell">
       <div className="app-card">
@@ -182,6 +186,12 @@ const handleSearchHistory = () => {
                         <li key={item.id} className="history-item">
                           <p><strong>Notes:</strong> {item.notes}</p>
                           <p><strong>Summary:</strong> {item.summary}</p>
+                          <button
+                            className="delete-history-item-button"
+                            onClick={() => handleDeleteHistoryItem(item.id)}
+                          >
+                            Delete
+                          </button>
                         </li>
                       ))}
                     </ul>
